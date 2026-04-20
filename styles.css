@@ -56,6 +56,18 @@ a {
   padding: 1.5rem 0 4.5rem;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+.logo-container img {
+  max-width: 100%;
+  height: auto;
+}
+
 .site-nav {
   display: flex;
   justify-content: space-between;

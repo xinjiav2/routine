@@ -565,14 +565,11 @@ let editingEventId = null;
 let popEventId = null;
 let selectedColor = '#6d4aff';
 
-let events = [
-  { id: uid(), title: 'Team standup', date: fmtD(today), time: '09:00', cal: 'work', color: '#4a9eff' },
-  { id: uid(), title: 'Lunch with Alex', date: fmtD(addDays(today, 2)), time: '12:30', cal: 'personal', color: '#3db88a' },
-  { id: uid(), title: 'Project deadline', date: fmtD(addDays(today, 5)), cal: 'work', color: '#e5584a' },
-  { id: uid(), title: "Mom's birthday 🎂", date: fmtD(addDays(today, 9)), cal: 'personal', color: '#6d4aff' },
-  { id: uid(), title: 'Gym', date: fmtD(addDays(today, 1)), time: '07:00', cal: 'personal', color: '#6d4aff' },
-  { id: uid(), title: 'Dentist appt', date: fmtD(addDays(today, 12)), time: '14:00', cal: 'other', color: '#3db88a' },
-];
+let events = JSON.parse(localStorage.getItem('cal_events') || '[]');
+
+function saveEvents() {
+  localStorage.setItem('cal_events', JSON.stringify(events));
+}
 
 // ── UTILS ──
 function uid() { return Math.random().toString(36).slice(2); }
@@ -758,6 +755,7 @@ function saveEvent() {
   } else {
     events.push(ev);
   }
+  saveEvents();
   closeModal();
   render();
 }
@@ -789,7 +787,7 @@ function showPop(id, e) {
 }
 function closePop() { document.getElementById('eventPopover').classList.remove('open'); popEventId = null; }
 function editFromPop() { const ev = events.find(x => x.id === popEventId); closePop(); if (ev) openEditModal(ev); }
-function deleteFromPop() { events = events.filter(e => e.id !== popEventId); closePop(); render(); }
+function deleteFromPop() { events = events.filter(e => e.id !== popEventId); saveEvents(); closePop(); render(); }
 
 // ── CAL TOGGLE ──
 function toggleCal(cal) { hiddenCals.has(cal) ? hiddenCals.delete(cal) : hiddenCals.add(cal); render(); }
